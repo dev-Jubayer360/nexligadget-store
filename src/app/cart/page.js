@@ -17,6 +17,7 @@ export default function CartPage() {
   const [selectedAddressId, setSelectedAddressId] = useState('');
   const [appliedShippingCost, setAppliedShippingCost] = useState(null);
   
+  const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
   const [applyingCoupon, setApplyingCoupon] = useState(false);
 
