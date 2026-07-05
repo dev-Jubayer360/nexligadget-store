@@ -83,8 +83,8 @@ export default function AdminOrders() {
         `"${order.shippingAddress?.fullName || ''}"`,
         `"${order.shippingAddress?.phone || ''}"`,
         `"${order.shippingAddress?.email || ''}"`,
-        `"${order.shippingAddress?.address || ''}"`,
-        `"${order.shippingAddress?.city || ''}"`,
+        `"${order.shippingAddress?.addressLine1 || ''} ${order.shippingAddress?.addressLine2 || ''}"`,
+        `"${order.shippingAddress?.city || ''}, ${order.shippingAddress?.division || ''}"`,
         order.total,
         order.orderStatus,
         order.paymentStatus,
@@ -232,8 +232,9 @@ export default function AdminOrders() {
                 </div>
                 <div>
                   <div className="text-xs text-gray-500 uppercase font-bold mb-1">Shipping Address</div>
-                  <div className="text-sm text-gray-900">{selectedOrder.shippingAddress?.address}</div>
-                  <div className="text-sm text-gray-900">{selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.zipCode}</div>
+                  <div className="text-sm text-gray-900">{selectedOrder.shippingAddress?.addressLine1} {selectedOrder.shippingAddress?.addressLine2}</div>
+                  <div className="text-sm text-gray-900">{selectedOrder.shippingAddress?.city}, {selectedOrder.shippingAddress?.division}</div>
+                  <div className="text-sm text-gray-900 font-medium mt-1">({selectedOrder.shippingAddress?.addressType})</div>
                 </div>
               </div>
 
