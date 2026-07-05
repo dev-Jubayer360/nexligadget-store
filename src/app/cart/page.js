@@ -17,13 +17,25 @@ export default function CartPage() {
   const [selectedAddressId, setSelectedAddressId] = useState('');
   const [appliedShippingCost, setAppliedShippingCost] = useState(null);
   
-  const [couponCode, setCouponCode] = useState('');
   const [couponError, setCouponError] = useState('');
   const [applyingCoupon, setApplyingCoupon] = useState(false);
+
+  const [suggestedProducts, setSuggestedProducts] = useState([]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
+    
+    // Fetch suggested products
+    const fetchSuggested = async () => {
+      try {
+        const res = await api.get('/products?limit=5');
+        setSuggestedProducts(res.data.data.products || []);
+      } catch (err) {
+        console.error('Failed to fetch suggested products', err);
+      }
+    };
+    fetchSuggested();
   }, []);
 
   useEffect(() => {
@@ -366,16 +378,16 @@ export default function CartPage() {
         </div>
         
         {/* You May Also Like */}
-        <div className="mt-16">
-          <h2 className="text-2xl font-black text-primary mb-8 text-center uppercase">You May Also Like</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            <ProductCard product={{ id: '2', name: 'Smart Scalp Massager', slug: 'massager', price: 990, oldPrice: 1250, rating: 4.6, reviews: 98, image: 'https://via.placeholder.com/300?text=Massager', inStock: true }} />
-            <ProductCard product={{ id: '3', name: 'D16 Air Humidifier', slug: 'humidifier', price: 699, oldPrice: 950, rating: 4.7, reviews: 77, image: 'https://via.placeholder.com/300?text=Humidifier', inStock: true }} />
-            <ProductCard product={{ id: '4', name: 'Baseus 20000mAh Power Bank', slug: 'pb', price: 2250, oldPrice: 2650, rating: 4.8, reviews: 156, image: 'https://via.placeholder.com/300?text=Power+Bank', badge: '-15%', inStock: true }} />
-            <ProductCard product={{ id: '5', name: 'GearUP Acrylic Multicolor Lamp', slug: 'lamp', price: 700, oldPrice: 890, rating: 4.9, reviews: 62, image: 'https://via.placeholder.com/300?text=Lamp', inStock: true }} />
-            <ProductCard product={{ id: '6', name: 'Jisulife FB Hand Fan', slug: 'fan', price: 1400, oldPrice: 1750, rating: 4.6, reviews: 76, image: 'https://via.placeholder.com/300?text=Fan', inStock: true }} />
+        {suggestedProducts.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-2xl font-black text-primary mb-8 text-center uppercase">You May Also Like</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {suggestedProducts.map(product => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
       </div>
     </div>
