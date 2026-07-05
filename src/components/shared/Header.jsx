@@ -118,8 +118,8 @@ export default function Header() {
             </Link>
           </div>
           <Link href="/shop" className="hover:text-accent transition-colors">CATEGORIES</Link>
-          <Link href="/shop" className="hover:text-accent transition-colors">BEST SELLERS</Link>
-          <Link href="/shop" className="hover:text-accent transition-colors">NEW ARRIVALS</Link>
+          <Link href="/shop?badge=Bestseller" className="hover:text-accent transition-colors">BEST SELLERS</Link>
+          <Link href="/shop?badge=New" className="hover:text-accent transition-colors">NEW ARRIVALS</Link>
           <Link href="/shop" className="hover:text-accent transition-colors">COMBO OFFERS</Link>
 
           <Link href="/contact" className="hover:text-accent transition-colors">CONTACT US</Link>
