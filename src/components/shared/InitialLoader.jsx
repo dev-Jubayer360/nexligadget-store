@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 export default function InitialLoader() {
   const [fadeOut, setFadeOut] = useState(false);
+  const [unmount, setUnmount] = useState(false);
 
   useEffect(() => {
     // Check if it's the first visit in this session
@@ -12,20 +13,20 @@ export default function InitialLoader() {
         setFadeOut(true);
         sessionStorage.setItem('hasVisited', 'true');
         
-        // Remove from DOM after fade transition completes
+        // Unmount after fade transition completes
         setTimeout(() => {
-          const loader = document.getElementById('initial-loader');
-          if (loader) loader.remove();
+          setUnmount(true);
         }, 500); 
       }, 5000); 
       
       return () => clearTimeout(timer);
     } else {
-      // Clean up from DOM immediately if already visited
-      const loader = document.getElementById('initial-loader');
-      if (loader) loader.remove();
+      // Unmount immediately if already visited
+      setUnmount(true);
     }
   }, []);
+
+  if (unmount) return null;
 
   return (
     <div 
