@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Loader2, Trash2, Eye, X } from 'lucide-react';
+import { Loader2, Trash2, Eye, X, Download } from 'lucide-react';
 import api from '@/lib/api';
 
 export default function AdminOrders() {
@@ -64,6 +64,48 @@ export default function AdminOrders() {
     setIsModalOpen(true);
   };
 
+  const handleDownloadReport = () => {
+    if (orders.length === 0) {
+      alert("No orders to download");
+      return;
+    }
+
+    // CSV Headers
+    const headers = ["Order ID", "Date", "Customer Name", "Phone", "Email", "Address", "City", "Total", "Order Status", "Payment Status", "Transaction ID"];
+    
+    // CSV Rows
+    const csvRows = [headers.join(',')];
+    
+    for (const order of orders) {
+      const row = [
+        `#${order._id.substring(order._id.length - 6).toUpperCase()}`,
+        `"${new Date(order.createdAt).toLocaleString()}"`,
+        `"${order.shippingAddress?.fullName || ''}"`,
+        `"${order.shippingAddress?.phone || ''}"`,
+        `"${order.shippingAddress?.email || ''}"`,
+        `"${order.shippingAddress?.address || ''}"`,
+        `"${order.shippingAddress?.city || ''}"`,
+        order.total,
+        order.orderStatus,
+        order.paymentStatus,
+        `"${order.transactionId || ''}"`
+      ];
+      csvRows.push(row.join(','));
+    }
+
+    // Create Blob and trigger download
+    const csvData = csvRows.join('\n');
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', `Orders_Report_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -79,6 +121,9 @@ export default function AdminOrders() {
           <h2 className="text-xl font-bold text-gray-900">Order Management</h2>
           <p className="text-sm text-gray-500">View and manage customer orders</p>
         </div>
+        <button onClick={handleDownloadReport} className="bg-accent text-white px-4 py-2 rounded-lg font-bold hover:bg-accent-hover flex items-center gap-2 text-sm transition-colors shadow-sm">
+          <Download size={16} /> Download Report
+        </button>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
