@@ -4,7 +4,7 @@ import ProductCard from '@/components/shared/ProductCard';
 import api from '@/lib/api';
 import { ArrowRight, Tag } from 'lucide-react';
 
-export const revalidate = 60; // Revalidate page every 60 seconds
+export const dynamic = 'force-dynamic'; // Always fetch fresh data on every load
 
 const getCategoryImage = (name) => {
   const n = name.toLowerCase();
