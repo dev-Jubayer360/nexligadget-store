@@ -114,13 +114,10 @@ export default function Header() {
           <div className="group relative">
             <Link href="/shop" className="text-accent hover:text-accent-hover transition-colors flex items-center gap-1">
               SHOP
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
             </Link>
           </div>
-          <Link href="/shop" className="hover:text-accent transition-colors">CATEGORIES</Link>
           <Link href="/shop?badge=Bestseller" className="hover:text-accent transition-colors">BEST SELLERS</Link>
           <Link href="/shop?badge=New" className="hover:text-accent transition-colors">NEW ARRIVALS</Link>
-          <Link href="/shop" className="hover:text-accent transition-colors">COMBO OFFERS</Link>
 
           <Link href="/contact" className="hover:text-accent transition-colors">CONTACT US</Link>
         </div>

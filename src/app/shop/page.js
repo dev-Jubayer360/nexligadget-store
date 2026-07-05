@@ -19,6 +19,16 @@ export default function ShopPage() {
   const [rating, setRating] = useState(0);
   const [stock, setStock] = useState(''); // 'inStock', 'outOfStock', or ''
   const [sort, setSort] = useState('newest');
+  const [badge, setBadge] = useState('');
+
+  useEffect(() => {
+    // Read badge from URL query string on mount
+    const searchParams = new URLSearchParams(window.location.search);
+    const badgeParam = searchParams.get('badge');
+    if (badgeParam) {
+      setBadge(badgeParam);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -43,6 +53,7 @@ export default function ShopPage() {
         if (rating > 0) url += `&rating=${rating}`;
         if (stock) url += `&stock=${stock}`;
         if (sort) url += `&sort=${sort}`;
+        if (badge) url += `&badge=${badge}`;
 
         const res = await api.get(url);
         setProducts(res.data.data.products || []);
@@ -60,7 +71,7 @@ export default function ShopPage() {
     }, 300);
     
     return () => clearTimeout(timer);
-  }, [page, category, minPrice, maxPrice, rating, stock, sort]);
+  }, [page, category, minPrice, maxPrice, rating, stock, sort, badge]);
 
   return (
     <div className="bg-gray-50 min-h-screen pb-12">
@@ -206,6 +217,7 @@ export default function ShopPage() {
                 setRating(0);
                 setStock('');
                 setSort('newest');
+                setBadge('');
                 setPage(1);
               }}
               className="flex-1 py-2 border border-gray-200 text-gray-600 rounded text-sm font-medium hover:bg-gray-50 transition-colors"
