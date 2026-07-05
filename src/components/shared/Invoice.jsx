@@ -7,7 +7,7 @@ const Invoice = ({ order }) => {
   const date = new Date(order.createdAt).toLocaleDateString();
 
   return (
-    <div id="invoice-template" className="bg-[#ffffff] text-[#111827] p-10 w-[800px] hidden-in-ui" style={{ display: 'none' }}>
+    <div id="invoice-template" className="bg-[#ffffff] text-[#111827] p-10 hidden-in-ui" style={{ display: 'none', width: '190mm', maxWidth: '100%' }}>
       {/* Header */}
       <div className="flex justify-between items-start mb-12 border-b-2 border-[#f3f4f6] pb-8">
         <div>
