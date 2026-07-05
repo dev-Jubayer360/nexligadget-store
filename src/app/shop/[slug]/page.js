@@ -8,6 +8,7 @@ import api from '@/lib/api';
 import useCartStore from '@/store/cartStore';
 import useWishlistStore from '@/store/wishlistStore';
 import useAuthStore from '@/store/authStore';
+import useRecentViewStore from '@/store/recentViewStore';
 
 export default function ProductDetailsPage({ params }) {
   const router = useRouter();
@@ -20,6 +21,7 @@ export default function ProductDetailsPage({ params }) {
   const { addToCart, loading: cartLoading } = useCartStore();
   const { wishlist, addToWishlist, removeWishlistItem } = useWishlistStore();
   const { isAuthenticated } = useAuthStore();
+  const { addRecentProduct } = useRecentViewStore();
   
   const [isWishlisting, setIsWishlisting] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -35,6 +37,7 @@ export default function ProductDetailsPage({ params }) {
         const res = await api.get(`/products/${slug}`);
         const prodData = res.data.data;
         setProduct(prodData);
+        addRecentProduct(prodData); // Save to recently viewed
         
         // Fetch reviews
         const reviewsRes = await api.get(`/products/${prodData._id}/reviews`);

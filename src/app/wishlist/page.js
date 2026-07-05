@@ -6,11 +6,13 @@ import ProductCard from '@/components/shared/ProductCard';
 import useWishlistStore from '@/store/wishlistStore';
 import useCartStore from '@/store/cartStore';
 import useAuthStore from '@/store/authStore';
+import useRecentViewStore from '@/store/recentViewStore';
 
 export default function WishlistPage() {
   const { wishlist, loading, fetchWishlist, removeWishlistItem, clearWishlist } = useWishlistStore();
   const { addToCart } = useCartStore();
   const { isAuthenticated } = useAuthStore();
+  const { recentProducts } = useRecentViewStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -157,15 +159,16 @@ export default function WishlistPage() {
         </div>
 
         {/* Recently Viewed */}
-        <div className="mt-16">
-          <h2 className="text-2xl font-black text-primary mb-8 uppercase">Recently Viewed</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <ProductCard product={{ id: '4', name: 'Baseus 20000mAh Power Bank', slug: 'pb', price: 2250, oldPrice: 2650, rating: 4.8, reviews: 156, image: 'https://via.placeholder.com/300?text=Power+Bank', badge: '-15%', inStock: true }} />
-            <ProductCard product={{ id: '5', name: 'GearUP Acrylic Multicolor Lamp', slug: 'lamp', price: 700, oldPrice: 890, rating: 4.9, reviews: 62, image: 'https://via.placeholder.com/300?text=Lamp', inStock: true }} />
-            <ProductCard product={{ id: '6', name: 'Jisulife FB Hand Fan', slug: 'fan', price: 1400, oldPrice: 1750, rating: 4.6, reviews: 76, image: 'https://via.placeholder.com/300?text=Fan', inStock: true }} />
-            <ProductCard product={{ id: '7', name: 'Anker Nano 45W GaN Fast Charger', slug: 'charger', price: 2650, oldPrice: 2990, rating: 4.8, reviews: 112, image: 'https://via.placeholder.com/300?text=Charger', inStock: true }} />
+        {mounted && recentProducts.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-2xl font-black text-primary mb-8 uppercase">Recently Viewed</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {recentProducts.map(product => (
+                <ProductCard key={product._id || product.id} product={product} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
       </div>
     </div>
