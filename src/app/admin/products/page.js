@@ -18,7 +18,7 @@ export default function AdminProducts() {
   // Form State
   const [formData, setFormData] = useState({
     name: '',
-    shortDescription: '',
+    shortDescriptionText: '',
     description: '',
     price: '',
     originalPrice: '',
@@ -61,7 +61,7 @@ export default function AdminProducts() {
       setEditingProduct(product);
       setFormData({
         name: product.name,
-        shortDescription: product.shortDescription || '',
+        shortDescriptionText: product.shortDescription ? (Array.isArray(product.shortDescription) ? product.shortDescription.join('\n') : product.shortDescription) : '',
         description: product.description,
         price: product.price,
         originalPrice: product.originalPrice || '',
@@ -78,7 +78,7 @@ export default function AdminProducts() {
       setEditingProduct(null);
       setFormData({
         name: '',
-        shortDescription: '',
+        shortDescriptionText: '',
         description: '',
         price: '',
         originalPrice: '',
@@ -125,6 +125,7 @@ export default function AdminProducts() {
 
       const payload = {
         ...formData,
+        shortDescription: formData.shortDescriptionText.split('\n').filter(Boolean).map(s => s.trim()),
         price: Number(formData.price),
         originalPrice: formData.originalPrice ? Number(formData.originalPrice) : undefined,
         stock: Number(formData.stock),
@@ -260,8 +261,8 @@ export default function AdminProducts() {
                 </div>
 
                 <div className="col-span-2">
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Short Description *</label>
-                  <input required type="text" value={formData.shortDescription} onChange={(e) => setFormData({...formData, shortDescription: e.target.value})} className="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:border-accent" />
+                  <label className="block text-sm font-bold text-gray-700 mb-2">Short Description (Line by line) <span className="text-red-500">*</span></label>
+                  <textarea required rows="4" value={formData.shortDescriptionText} onChange={(e) => setFormData({...formData, shortDescriptionText: e.target.value})} className="w-full border border-gray-300 rounded-lg p-2.5 outline-none focus:border-accent" placeholder="Feature 1&#10;Feature 2"></textarea>
                 </div>
                 
                 <div className="col-span-2">

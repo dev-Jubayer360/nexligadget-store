@@ -180,9 +180,17 @@ export default function ProductDetailsPage({ params }) {
               {discountPercentage > 0 && <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded mb-2">-{discountPercentage}%</span>}
             </div>
 
-            <p className="text-gray-600 text-sm mb-6 leading-relaxed">
-              {product.shortDescription}
-            </p>
+            {Array.isArray(product.shortDescription) ? (
+              <ul className="list-disc list-inside text-gray-600 text-sm mb-6 space-y-1">
+                {product.shortDescription.map((desc, idx) => (
+                  <li key={idx}>{desc}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-600 text-sm mb-6 leading-relaxed">
+                {product.shortDescription}
+              </p>
+            )}
 
             {/* Colors (Skipped for now as it needs variant logic) */}
 
