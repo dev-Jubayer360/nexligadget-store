@@ -1,11 +1,16 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/shared/ProductCard';
 import { Star, LayoutGrid, List as ListIcon, ChevronRight, Loader2 } from 'lucide-react';
 import api from '@/lib/api';
 
-export default function ShopPage() {
+function ShopContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const badgeParam = searchParams.get('badge') || '';
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('');
@@ -19,16 +24,7 @@ export default function ShopPage() {
   const [rating, setRating] = useState(0);
   const [stock, setStock] = useState(''); // 'inStock', 'outOfStock', or ''
   const [sort, setSort] = useState('newest');
-  const [badge, setBadge] = useState('');
 
-  useEffect(() => {
-    // Read badge from URL query string on mount
-    const searchParams = new URLSearchParams(window.location.search);
-    const badgeParam = searchParams.get('badge');
-    if (badgeParam) {
-      setBadge(badgeParam);
-    }
-  }, []);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -53,7 +49,7 @@ export default function ShopPage() {
         if (rating > 0) url += `&rating=${rating}`;
         if (stock) url += `&stock=${stock}`;
         if (sort) url += `&sort=${sort}`;
-        if (badge) url += `&badge=${badge}`;
+        if (badgeParam) url += `&badge=${badgeParam}`;
 
         const res = await api.get(url);
         setProducts(res.data.data.products || []);
@@ -71,7 +67,7 @@ export default function ShopPage() {
     }, 300);
     
     return () => clearTimeout(timer);
-  }, [page, category, minPrice, maxPrice, rating, stock, sort, badge]);
+  }, [page, category, minPrice, maxPrice, rating, stock, sort, badgeParam]);
 
   return (
     <div className="bg-gray-50 min-h-screen pb-12">
@@ -217,8 +213,8 @@ export default function ShopPage() {
                 setRating(0);
                 setStock('');
                 setSort('newest');
-                setBadge('');
                 setPage(1);
+                if (badgeParam) router.push('/shop');
               }}
               className="flex-1 py-2 border border-gray-200 text-gray-600 rounded text-sm font-medium hover:bg-gray-50 transition-colors"
             >
@@ -295,5 +291,13 @@ export default function ShopPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ShopPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-accent" /></div>}>
+      <ShopContent />
+    </Suspense>
   );
 }
