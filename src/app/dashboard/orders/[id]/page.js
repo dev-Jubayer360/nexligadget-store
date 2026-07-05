@@ -88,10 +88,10 @@ export default function OrderDetailsPage() {
       element.style.display = 'block';
 
       const opt = {
-        margin:       10,
+        margin:       [10, 10, 0, 10],
         filename:     `Invoice_${order._id.substring(order._id.length - 6).toUpperCase()}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
+        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
