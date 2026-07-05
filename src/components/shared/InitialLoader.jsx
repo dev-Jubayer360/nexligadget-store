@@ -8,7 +8,7 @@ export default function InitialLoader() {
   useEffect(() => {
     // Check if it's the first visit in this session
     if (!sessionStorage.getItem('hasVisited')) {
-      // Hold the spinner for 5 seconds to let background load
+      // Hold the spinner for 1 second to let background load without annoying the user
       const timer = setTimeout(() => {
         setFadeOut(true);
         sessionStorage.setItem('hasVisited', 'true');
@@ -17,7 +17,7 @@ export default function InitialLoader() {
         setTimeout(() => {
           setUnmount(true);
         }, 500); 
-      }, 5000); 
+      }, 1000); 
       
       return () => clearTimeout(timer);
     } else {
