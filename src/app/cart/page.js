@@ -282,26 +282,7 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* Saved for Later */}
-            <div className="mb-12">
-               <h3 className="font-bold text-gray-900 mb-6 uppercase">Saved for Later (1)</h3>
-               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center justify-between">
-                 <div className="flex items-center gap-4">
-                   <div className="w-16 h-16 bg-gray-50 rounded border border-gray-100 p-1 flex items-center justify-center">
-                     <img src="https://via.placeholder.com/150?text=Camera" alt="Camera" className="w-full h-full object-contain" />
-                   </div>
-                   <div>
-                     <h4 className="font-bold text-sm text-gray-900">Instant Print Digital Kids Camera</h4>
-                     <p className="text-xs text-gray-500 mt-1">Color: Pink</p>
-                     <div className="font-bold text-gray-900 mt-1">2,550 BDT</div>
-                   </div>
-                 </div>
-                 <div className="flex gap-2">
-                   <button className="px-4 py-2 bg-gray-100 text-gray-700 font-bold text-sm rounded hover:bg-gray-200 transition-colors">Move to Cart</button>
-                   <button className="p-2 border border-gray-200 text-gray-400 rounded hover:text-red-500 transition-colors"><Trash2 size={18}/></button>
-                 </div>
-               </div>
-            </div>
+
 
           </div>
 
