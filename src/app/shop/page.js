@@ -10,10 +10,11 @@ function ShopContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const badgeParam = searchParams.get('badge') || '';
+  const categoryParam = searchParams.get('category') || '';
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(categoryParam);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [categoriesList, setCategoriesList] = useState([]);
@@ -37,6 +38,14 @@ function ShopContent() {
     };
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    if (categoryParam !== category) {
+      setCategory(categoryParam);
+      setPage(1);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryParam]);
 
   useEffect(() => {
     const fetchProducts = async () => {

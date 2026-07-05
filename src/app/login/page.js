@@ -80,7 +80,7 @@ export default function LoginPage() {
 
   return (
     <div className="bg-primary min-h-screen py-12 flex items-center">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col md:flex-row gap-8 items-center">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col-reverse md:flex-row gap-8 items-center">
         
         {/* Left Column: Branding / Info */}
         <div className="w-full md:w-1/2 text-white p-6 relative">

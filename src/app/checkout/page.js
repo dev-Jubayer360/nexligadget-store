@@ -77,7 +77,7 @@ const bdCities = [
 export default function CheckoutPage() {
   const router = useRouter();
   const { cart, loading: cartLoading, fetchCart, clearCart } = useCartStore();
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   
   const [formData, setFormData] = useState({
     email: '',
@@ -142,9 +142,11 @@ export default function CheckoutPage() {
           else if (fetchedAddresses.length > 0) handleAddressSelect(fetchedAddresses[0]._id, fetchedAddresses);
         })
         .catch(err => console.error("Failed to fetch addresses:", err));
+    } else {
+      router.push('/login');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchCart, user]);
+  }, [fetchCart, user, router]);
 
   function handleAddressSelect(addrId, addrList = addresses) {
     setSelectedAddressId(addrId);

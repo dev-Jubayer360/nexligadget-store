@@ -75,30 +75,48 @@ export default function ProductDetailsPage({ params }) {
   const inWishlist = mounted && wishlist?.products?.some(item => item._id === product._id || item === product._id);
 
   const handleAddToCart = async () => {
-    if (!isAuthenticated) return alert('Please login to add to cart');
-    const success = await addToCart(product._id, quantity);
+    const success = await addToCart(product, quantity);
     if (success) alert('Added to cart!');
   };
 
   const handleBuyNow = async () => {
-    if (!isAuthenticated) return alert('Please login to buy');
-    const success = await addToCart(product._id, quantity);
+    const success = await addToCart(product, quantity);
     if (success) {
       router.push('/cart');
     }
   };
 
   const handleWishlistClick = async () => {
-    if (!isAuthenticated) return alert('Please login to use wishlist');
     setIsWishlisting(true);
     if (inWishlist) {
       const success = await removeWishlistItem(product._id);
       if (success) alert('Removed from wishlist!');
     } else {
-      const success = await addToWishlist(product._id);
+      const success = await addToWishlist(product);
       if (success) alert('Added to wishlist!');
     }
     setIsWishlisting(false);
+  };
+  
+  const handleCompareClick = () => {
+    alert('Compare functionality is coming soon!');
+  };
+
+  const handleShareClick = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: product.name,
+          text: `Check out ${product.name} on Nexli Gadget!`,
+          url: window.location.href,
+        });
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Product link copied to clipboard!');
+    }
   };
   
   const discountPercentage = product.oldPrice ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100) : 0;
@@ -219,10 +237,10 @@ export default function ProductDetailsPage({ params }) {
                 {isWishlisting ? <Loader2 size={18} className="animate-spin" /> : <Heart size={18} fill={inWishlist ? "currentColor" : "none"} />} 
                 {inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
               </button>
-              <button className="flex items-center gap-2 hover:text-accent transition-colors">
+              <button onClick={handleCompareClick} className="flex items-center gap-2 hover:text-accent transition-colors">
                 <ArrowLeftRight size={18} /> Compare
               </button>
-              <button className="flex items-center gap-2 hover:text-accent transition-colors">
+              <button onClick={handleShareClick} className="flex items-center gap-2 hover:text-accent transition-colors">
                 <Share2 size={18} /> Share
               </button>
             </div>

@@ -45,21 +45,19 @@ export default React.memo(function ProductCard({ product }) {
 
   const handleWishlistClick = async (e) => {
     e.preventDefault();
-    if (!isAuthenticated) return alert('Please login to use wishlist');
     setIsWishlisting(true);
     if (inWishlist) {
       await removeWishlistItem(id);
     } else {
-      await addToWishlist(id);
+      await addToWishlist(p);
     }
     setIsWishlisting(false);
   };
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
-    if (!isAuthenticated) return alert('Please login to add to cart');
     setIsAddingToCart(true);
-    await addToCart(id, 1);
+    await addToCart(p, 1);
     setIsAddingToCart(false);
   };
 
