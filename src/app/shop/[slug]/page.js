@@ -101,10 +101,6 @@ export default function ProductDetailsPage({ params }) {
     setIsWishlisting(false);
   };
   
-  const handleCompareClick = () => {
-    alert('Compare functionality is coming soon!');
-  };
-
   const handleShareClick = async () => {
     if (navigator.share) {
       try {
@@ -239,9 +235,6 @@ export default function ProductDetailsPage({ params }) {
               >
                 {isWishlisting ? <Loader2 size={18} className="animate-spin" /> : <Heart size={18} fill={inWishlist ? "currentColor" : "none"} />} 
                 {inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
-              </button>
-              <button onClick={handleCompareClick} className="flex items-center gap-2 hover:text-accent transition-colors">
-                <ArrowLeftRight size={18} /> Compare
               </button>
               <button onClick={handleShareClick} className="flex items-center gap-2 hover:text-accent transition-colors">
                 <Share2 size={18} /> Share
