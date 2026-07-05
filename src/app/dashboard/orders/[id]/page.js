@@ -256,6 +256,34 @@ export default function OrderDetailsPage() {
                 <span className="font-bold text-gray-900">Total</span>
                 <span className="text-xl font-black text-accent">৳ {order.total}</span>
               </div>
+              {(() => {
+                const isApproved = order.paymentStatus === 'Approved';
+                const isPartial = order.paymentMethod === 'bKash_Partial';
+                const isFull = order.paymentMethod === 'bKash_Full';
+                
+                let paid = 0;
+                if (isApproved) {
+                  if (isPartial) paid = 200;
+                  else if (isFull) paid = order.total;
+                }
+                
+                const due = order.total - paid;
+                
+                return (
+                  <>
+                    <div className="flex justify-between items-center pt-2 text-green-600">
+                      <span className="font-bold">Paid Amount</span>
+                      <span className="font-bold">{paid === order.total && paid > 0 ? 'Full Paid' : `৳ ${paid}`}</span>
+                    </div>
+                    {due > 0 && (
+                      <div className="flex justify-between items-center pt-2 text-red-600">
+                        <span className="font-bold">Due Amount</span>
+                        <span className="font-bold">৳ {due}</span>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
 
             <div className="mt-6 pt-6 border-t border-gray-100">

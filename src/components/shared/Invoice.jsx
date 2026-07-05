@@ -94,6 +94,34 @@ const Invoice = ({ order }) => {
             <span>Total</span>
             <span className="text-[#E2136E]">৳ {order.total}</span>
           </div>
+          {(() => {
+            const isApproved = order.paymentStatus === 'Approved';
+            const isPartial = order.paymentMethod === 'bKash_Partial';
+            const isFull = order.paymentMethod === 'bKash_Full';
+            
+            let paid = 0;
+            if (isApproved) {
+              if (isPartial) paid = 200;
+              else if (isFull) paid = order.total;
+            }
+            
+            const due = order.total - paid;
+            
+            return (
+              <>
+                <div className="flex justify-between py-2 text-sm text-[#16a34a] font-bold border-t border-[#f9fafb]">
+                  <span>Paid Amount</span>
+                  <span>{paid === order.total && paid > 0 ? 'Full Paid' : `৳ ${paid}`}</span>
+                </div>
+                {due > 0 && (
+                  <div className="flex justify-between py-2 text-sm text-[#dc2626] font-bold border-t border-[#f9fafb]">
+                    <span>Due Amount</span>
+                    <span>৳ {due}</span>
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       </div>
 
