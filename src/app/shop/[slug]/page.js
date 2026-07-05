@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Star, Heart, Share2, ArrowLeftRight, ChevronRight, CheckCircle2, Shield, Truck, CreditCard, ChevronDown, ChevronUp, ShoppingCart, Loader2 } from 'lucide-react';
 import ProductCard from '@/components/shared/ProductCard';
@@ -144,18 +145,16 @@ export default function ProductDetailsPage({ params }) {
             <div className="flex flex-col gap-3 w-20">
               <button className="text-gray-400 hover:text-primary flex justify-center"><ChevronUp size={20}/></button>
               {product.images?.slice(0, 4).map((img, i) => (
-                <div key={i} className={`w-20 h-20 rounded-lg border-2 cursor-pointer overflow-hidden ${i===0 ? 'border-accent' : 'border-gray-200'}`}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={(typeof img === 'string' ? img : img?.url) || 'https://via.placeholder.com/150'} alt={`thumb-${i}`} className="w-full h-full object-cover" />
+                <div key={i} className={`relative w-20 h-20 rounded-lg border-2 cursor-pointer overflow-hidden ${i===0 ? 'border-accent' : 'border-gray-200'}`}>
+                  <Image src={(typeof img === 'string' ? img : img?.url) || 'https://via.placeholder.com/150'} alt={`thumb-${i}`} fill sizes="80px" className="object-cover" />
                 </div>
               ))}
               <button className="text-gray-400 hover:text-primary flex justify-center"><ChevronDown size={20}/></button>
             </div>
             {/* Main Image */}
-            <div className="flex-1 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center relative overflow-hidden">
-               {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src={(typeof product.images?.[0] === 'string' ? product.images[0] : product.images?.[0]?.url) || 'https://via.placeholder.com/600'} alt={product.name} className="max-h-[400px] object-contain" />
-               {discountPercentage > 0 && <span className="absolute top-4 left-4 bg-accent text-white font-bold px-3 py-1 rounded text-sm shadow">-{discountPercentage}%</span>}
+            <div className="flex-1 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center relative overflow-hidden min-h-[400px]">
+               <Image src={(typeof product.images?.[0] === 'string' ? product.images[0] : product.images?.[0]?.url) || 'https://via.placeholder.com/600'} alt={product.name} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-contain p-4" priority />
+               {discountPercentage > 0 && <span className="absolute top-4 left-4 bg-accent text-white font-bold px-3 py-1 rounded text-sm shadow z-10">-{discountPercentage}%</span>}
             </div>
           </div>
 

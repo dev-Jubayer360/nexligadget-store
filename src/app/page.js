@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import ProductCard from '@/components/shared/ProductCard';
 import api from '@/lib/api';
 import { ArrowRight, Tag } from 'lucide-react';
@@ -93,8 +94,7 @@ export default async function Home() {
               {/* Central Image Container */}
               <div className="relative z-10 w-full max-w-[400px] h-[300px] md:h-[350px] flex items-center justify-center">
                 {hero.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={hero.image} alt="Hero Banner" className="w-full h-full object-contain drop-shadow-2xl" style={{ mixBlendMode: 'screen' }} />
+                  <Image src={hero.image} alt="Hero Banner" fill sizes="(max-width: 768px) 100vw, 400px" className="object-contain drop-shadow-2xl" style={{ mixBlendMode: 'screen' }} priority />
                 ) : (
                   <div className="w-64 h-64 bg-white/5 rounded-full flex flex-col items-center justify-center text-accent text-center p-4 backdrop-blur-sm border border-white/10">
                      {/* Dummy 3D Pedestal Shape representing missing image */}
@@ -186,9 +186,8 @@ export default async function Home() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {categories.map((cat) => (
               <Link href={`/shop?category=${cat._id}`} key={cat._id} className="bg-white rounded-xl p-6 text-center shadow-sm hover:shadow-md hover:border-accent border border-transparent transition-all group">
-                <div className="w-16 h-16 mx-auto bg-gray-50 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform overflow-hidden shadow-inner">
-                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                   <img src={cat.image || getCategoryImage(cat.name)} alt={cat.name} className="w-full h-full object-cover" />
+                <div className="w-16 h-16 mx-auto bg-gray-50 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform overflow-hidden shadow-inner relative">
+                   <Image src={cat.image || getCategoryImage(cat.name)} alt={cat.name} fill sizes="64px" className="object-cover" />
                 </div>
                 <h3 className="font-bold text-sm text-primary group-hover:text-accent">{cat.name}</h3>
               </Link>

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ShieldCheck, Truck, Lock, PhoneCall, ChevronRight, Edit2, CheckCircle2, Loader2, Copy, ClipboardPaste, X } from 'lucide-react';
 import useCartStore from '@/store/cartStore';
@@ -473,9 +474,8 @@ export default function CheckoutPage() {
               <div className="space-y-4 mb-6">
                 {cartItems.map(item => (
                   <div key={item.productId?._id} className="flex gap-4">
-                    <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 p-2">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={item.image || 'https://via.placeholder.com/150'} alt={item.name} className="w-full h-full object-contain" />
+                    <div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 relative overflow-hidden">
+                      <Image src={item.image || 'https://via.placeholder.com/150'} alt={item.name} fill sizes="64px" className="object-contain p-2" />
                     </div>
                     <div className="flex-1 flex flex-col justify-between py-0.5">
                       <div className="text-sm font-bold text-gray-900 line-clamp-2 leading-tight">{item.name}</div>

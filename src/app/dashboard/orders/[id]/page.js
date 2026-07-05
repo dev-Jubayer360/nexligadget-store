@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Loader2, ArrowLeft, Star, MessageSquare, CheckCircle2, Package, Truck, ShieldCheck, MapPin, X, Download } from 'lucide-react';
 import api from '@/lib/api';
 import Invoice from '@/components/shared/Invoice';
@@ -177,9 +178,8 @@ export default function OrderDetailsPage() {
               {order.items.map((item, idx) => (
                 <div key={idx} className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 bg-gray-50 rounded-xl flex-shrink-0 border border-gray-100 p-2">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={item.image || 'https://via.placeholder.com/150'} alt={item.name} className="w-full h-full object-contain mix-blend-multiply" />
+                    <div className="w-20 h-20 bg-gray-50 rounded-xl flex-shrink-0 border border-gray-100 relative overflow-hidden">
+                      <Image src={item.image || 'https://via.placeholder.com/150'} alt={item.name} fill sizes="80px" className="object-contain mix-blend-multiply p-2" />
                     </div>
                     <div>
                       <h4 className="font-bold text-gray-900 line-clamp-1">{item.name}</h4>
@@ -346,9 +346,8 @@ export default function OrderDetailsPage() {
             
             <div className="p-6">
               <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
-                <div className="w-16 h-16 bg-gray-50 rounded-lg border border-gray-100 p-2">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={selectedProduct.image || 'https://via.placeholder.com/150'} alt={selectedProduct.name} className="w-full h-full object-contain mix-blend-multiply" />
+                <div className="w-16 h-16 bg-gray-50 rounded-lg border border-gray-100 relative overflow-hidden">
+                  <Image src={selectedProduct.image || 'https://via.placeholder.com/150'} alt={selectedProduct.name} fill sizes="64px" className="object-contain mix-blend-multiply p-2" />
                 </div>
                 <div>
                   <h4 className="font-bold text-gray-900 line-clamp-2 leading-tight">{selectedProduct.name}</h4>

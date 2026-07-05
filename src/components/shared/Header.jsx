@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Search, User, Heart, ShoppingCart, Menu, PhoneCall, Truck } from 'lucide-react';
 import useAuthStore from '@/store/authStore';
 import useCartStore from '@/store/cartStore';
@@ -62,8 +63,7 @@ export default function Header() {
           
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-center gap-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/NexliGadgetLogo.png" alt="Nexli Gadget Logo" className="h-8 sm:h-10 md:h-12 object-contain" loading="lazy" decoding="async" />
+            <Image src="/NexliGadgetLogo.png" alt="Nexli Gadget Logo" width={180} height={48} className="h-8 sm:h-10 md:h-12 w-auto object-contain" priority />
           </Link>
         </div>
 

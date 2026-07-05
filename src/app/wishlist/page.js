@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Trash2, ShoppingCart, ChevronRight, ArrowLeft, Loader2 } from 'lucide-react';
 import ProductCard from '@/components/shared/ProductCard';
 import useWishlistStore from '@/store/wishlistStore';
@@ -109,9 +110,8 @@ export default function WishlistPage() {
                         <div className="md:hidden mt-2">
                           <input type="checkbox" className="accent-accent w-4 h-4 rounded cursor-pointer" />
                         </div>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <div className="w-20 h-20 bg-white rounded-lg border border-gray-100 flex-shrink-0 flex items-center justify-center p-2">
-                          <img src={(typeof item.images?.[0] === 'string' ? item.images[0] : item.images?.[0]?.url) || 'https://via.placeholder.com/150'} alt={item.name} className="w-full h-full object-contain" />
+                        <div className="w-20 h-20 bg-white rounded-lg border border-gray-100 flex-shrink-0 relative overflow-hidden">
+                          <Image src={(typeof item.images?.[0] === 'string' ? item.images[0] : item.images?.[0]?.url) || 'https://via.placeholder.com/150'} alt={item.name} fill sizes="80px" className="object-contain p-2" />
                         </div>
                         <div className="flex-1">
                           <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">{item.category?.name || 'Gadget'}</div>

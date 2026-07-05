@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Trash2, Heart, ArrowLeft, ShieldCheck, RefreshCcw, Truck, ChevronRight, Loader2 } from 'lucide-react';
 import ProductCard from '@/components/shared/ProductCard';
 import useCartStore from '@/store/cartStore';
@@ -135,9 +136,8 @@ export default function CartPage() {
                     <div key={item.productId?._id} className="p-4 flex flex-col md:grid md:grid-cols-12 gap-4 items-center">
                       <div className="col-span-6 flex items-start gap-4 w-full">
                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                         <div className="w-20 h-20 bg-gray-50 rounded-lg border border-gray-100 flex-shrink-0 p-2">
-                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                           <img src={item.image || 'https://via.placeholder.com/150'} alt={item.name} className="w-full h-full object-contain" />
+                         <div className="w-20 h-20 bg-gray-50 rounded-lg border border-gray-100 flex-shrink-0 relative overflow-hidden">
+                           <Image src={item.image || 'https://via.placeholder.com/150'} alt={item.name} fill sizes="80px" className="object-contain p-2" />
                         </div>
                          <div className="flex-1">
                            <Link href={`/shop/${item.productId?.slug}`} className="font-bold text-sm text-gray-900 hover:text-accent line-clamp-2 mb-1">{item.name}</Link>
