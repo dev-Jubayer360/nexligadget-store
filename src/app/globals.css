@@ -38,3 +38,8 @@ body {
 .rich-text-content u { text-decoration: underline; }
 .rich-text-content s { text-decoration: line-through; }
 
+/* Hide initial loader if already visited */
+html.has-visited #initial-loader {
+  display: none !important;
+}
+

@@ -1,24 +1,47 @@
-import React from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
 
-export default function Loading() {
+export default function InitialLoader() {
+  const [fadeOut, setFadeOut] = useState(false);
+
+  useEffect(() => {
+    // Check if it's the first visit in this session
+    if (!sessionStorage.getItem('hasVisited')) {
+      // Hold the spinner for 5 seconds to let background load
+      const timer = setTimeout(() => {
+        setFadeOut(true);
+        sessionStorage.setItem('hasVisited', 'true');
+        
+        // Remove from DOM after fade transition completes
+        setTimeout(() => {
+          const loader = document.getElementById('initial-loader');
+          if (loader) loader.remove();
+        }, 500); 
+      }, 5000); 
+      
+      return () => clearTimeout(timer);
+    } else {
+      // Clean up from DOM immediately if already visited
+      const loader = document.getElementById('initial-loader');
+      if (loader) loader.remove();
+    }
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-[9999] bg-[#0b0c1b] flex flex-col items-center justify-center">
-      {/* Background glow */}
+    <div 
+      id="initial-loader" 
+      className={`fixed inset-0 z-[99999] bg-[#0b0c1b] flex flex-col items-center justify-center transition-opacity duration-500 ${fadeOut ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+    >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-accent/20 rounded-full blur-[80px]"></div>
       
-      {/* Animated container */}
       <div className="relative flex flex-col items-center justify-center z-10">
-        
         <div className="relative w-32 h-32 flex items-center justify-center mb-8">
-           {/* Outer rotating rings */}
            <div className="absolute inset-0 border-t-2 border-r-2 border-accent rounded-full animate-[spin_3s_linear_infinite] opacity-80"></div>
            <div className="absolute inset-2 border-b-2 border-l-2 border-white/20 rounded-full animate-[spin_2s_linear_infinite_reverse]"></div>
            <div className="absolute inset-4 border-t-2 border-l-2 border-orange-400/50 rounded-full animate-[spin_4s_linear_infinite]"></div>
            
-           {/* Center Icon */}
            <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center backdrop-blur-md border border-white/10 shadow-[0_0_20px_rgba(248,86,6,0.3)] animate-pulse">
-                 {/* Lightning bolt icon */}
                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f85606" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
                  </svg>

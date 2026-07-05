@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
 import Providers from "@/components/Providers";
+import InitialLoader from "@/components/shared/InitialLoader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,10 +23,22 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (sessionStorage.getItem('hasVisited')) {
+                document.documentElement.classList.add('has-visited');
+              }
+            `
+          }}
+        />
+      </head>
       <body
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
+        <InitialLoader />
         <Providers>
           <Header />
           <main className="flex-grow">
