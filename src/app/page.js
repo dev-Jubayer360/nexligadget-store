@@ -81,7 +81,7 @@ export default async function Home() {
                 <Link href={hero.buttonLink || '/shop'} className="bg-accent hover:bg-[#e05600] text-white font-bold py-3 px-6 rounded-md flex items-center gap-2 transition-colors shadow-lg shadow-accent/20 text-sm">
                   {hero.buttonText || 'Shop Now'} <ArrowRight size={16} />
                 </Link>
-                <Link href="/shop?badge=Discount" className="bg-transparent border border-accent text-white hover:bg-accent/10 font-bold py-3 px-6 rounded-md flex items-center gap-2 transition-colors text-sm">
+                <Link href="/shop" className="bg-transparent border border-accent text-white hover:bg-accent/10 font-bold py-3 px-6 rounded-md flex items-center gap-2 transition-colors text-sm">
                   Explore Deals <Tag size={16} />
                 </Link>
               </div>
