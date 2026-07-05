@@ -96,7 +96,7 @@ export default function Header() {
           <Link href="/wishlist" className="flex flex-col items-center gap-1 text-gray-600 hover:text-accent transition-colors relative">
             <div className="relative">
               <Heart size={22} className="sm:w-6 sm:h-6" />
-              {mounted && isAuthenticated && wishlist?.products?.length > 0 && (
+              {mounted && wishlist?.products?.length > 0 && (
                 <span className="absolute -top-1.5 -right-2 bg-accent text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
                   {wishlist.products.length}
                 </span>
@@ -107,7 +107,7 @@ export default function Header() {
           <Link href="/cart" className="flex flex-col items-center gap-1 text-gray-600 hover:text-accent transition-colors relative">
             <div className="relative">
               <ShoppingCart size={22} className="sm:w-6 sm:h-6" />
-              {mounted && isAuthenticated && cart?.items?.length > 0 && (
+              {mounted && cart?.items?.length > 0 && (
                 <span className="absolute -top-1.5 -right-2 bg-accent text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
                   {cart.items.length}
                 </span>
