@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Loader2, ArrowLeft, Star, MessageSquare, CheckCircle2, Package, Truck, ShieldCheck, MapPin, X } from 'lucide-react';
+import { Loader2, ArrowLeft, Star, MessageSquare, CheckCircle2, Package, Truck, ShieldCheck, MapPin, X, Download } from 'lucide-react';
 import api from '@/lib/api';
+import Invoice from '@/components/shared/Invoice';
 
 export default function OrderDetailsPage() {
   const params = useParams();
@@ -21,6 +22,9 @@ export default function OrderDetailsPage() {
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState('');
   const [submittingReview, setSubmittingReview] = useState(false);
+
+  // Invoice Download State
+  const [downloadingInvoice, setDownloadingInvoice] = useState(false);
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -71,6 +75,38 @@ export default function OrderDetailsPage() {
     }
   };
 
+  const handleDownloadInvoice = async () => {
+    setDownloadingInvoice(true);
+    try {
+      // Dynamically import html2pdf to avoid Next.js SSR window is not defined error
+      const html2pdf = (await import('html2pdf.js')).default;
+      
+      const element = document.getElementById('invoice-template');
+      if (!element) return;
+      
+      // Temporarily make it visible for html2pdf to capture it
+      element.style.display = 'block';
+
+      const opt = {
+        margin:       10,
+        filename:     `Invoice_${order._id.substring(order._id.length - 6).toUpperCase()}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      await html2pdf().set(opt).from(element).save();
+      
+      // Hide it back
+      element.style.display = 'none';
+    } catch (error) {
+      console.error('Failed to generate invoice PDF:', error);
+      alert('Failed to generate invoice PDF');
+    } finally {
+      setDownloadingInvoice(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20 min-h-[60vh]">
@@ -109,9 +145,21 @@ export default function OrderDetailsPage() {
             <p className="text-sm text-gray-500 font-medium">#{order._id.substring(order._id.length - 6).toUpperCase()}</p>
           </div>
         </div>
-        <div className="text-right">
-          <p className="text-sm text-gray-500">Placed on</p>
-          <p className="font-bold text-gray-900">{new Date(order.createdAt).toLocaleDateString()}</p>
+        <div className="flex items-center gap-4">
+          <div className="text-right hidden sm:block">
+            <p className="text-sm text-gray-500">Placed on</p>
+            <p className="font-bold text-gray-900">{new Date(order.createdAt).toLocaleDateString()}</p>
+          </div>
+          {order.paymentStatus === 'Approved' && (
+            <button 
+              onClick={handleDownloadInvoice}
+              disabled={downloadingInvoice}
+              className="bg-accent text-white px-4 py-2 rounded-lg font-bold hover:bg-accent-hover flex items-center gap-2 text-sm transition-colors shadow-sm disabled:opacity-70"
+            >
+              {downloadingInvoice ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
+              {downloadingInvoice ? 'Generating...' : 'Download Invoice'}
+            </button>
+          )}
         </div>
       </div>
 
@@ -344,6 +392,11 @@ export default function OrderDetailsPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Hidden Invoice Template for PDF Generation */}
+      {order.paymentStatus === 'Approved' && (
+        <Invoice order={order} />
       )}
     </div>
   );
