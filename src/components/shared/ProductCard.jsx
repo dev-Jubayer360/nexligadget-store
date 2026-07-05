@@ -6,7 +6,7 @@ import useCartStore from '@/store/cartStore';
 import useWishlistStore from '@/store/wishlistStore';
 import useAuthStore from '@/store/authStore';
 
-export default function ProductCard({ product }) {
+export default React.memo(function ProductCard({ product }) {
   const { addToCart } = useCartStore();
   const { wishlist, addToWishlist, removeWishlistItem } = useWishlistStore();
   const { isAuthenticated } = useAuthStore();
@@ -94,6 +94,8 @@ export default function ProductCard({ product }) {
         <img 
           src={image} 
           alt={name} 
+          loading="lazy"
+          decoding="async"
           className="object-contain h-full w-full group-hover:scale-105 transition-transform duration-300"
         />
       </Link>
@@ -150,4 +152,4 @@ export default function ProductCard({ product }) {
       </div>
     </div>
   );
-}
+});

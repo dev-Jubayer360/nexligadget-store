@@ -28,7 +28,7 @@ export default function Footer() {
           <div>
             <Link href="/" className="flex-shrink-0 flex items-center gap-2 mb-6 bg-white p-2 rounded w-fit">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/NexliGadgetLogo.png" alt="Nexli Gadget Logo" className="h-8 object-contain" />
+              <img src="/NexliGadgetLogo.png" alt="Nexli Gadget Logo" className="h-8 object-contain" loading="lazy" decoding="async" />
             </Link>
             <p className="text-sm text-gray-400 mb-6">
               Your premier destination for high-quality gadgets and accessories. We bring the future to your doorstep.
@@ -126,7 +126,7 @@ export default function Footer() {
             {/* Payment Method */}
             <div className="bg-white px-3 py-1 rounded flex items-center justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="https://freelogopng.com/images/all_img/1656227518bkash-logo-png.png" alt="bKash" className="h-6 object-contain" />
+              <img src="https://freelogopng.com/images/all_img/1656227518bkash-logo-png.png" alt="bKash" className="h-6 object-contain" loading="lazy" decoding="async" />
             </div>
           </div>
         </div>
