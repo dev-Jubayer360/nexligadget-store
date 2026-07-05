@@ -63,7 +63,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0 flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/NexliGadgetLogo.png" alt="Nexli Gadget Logo" className="h-10 sm:h-12 object-contain" loading="lazy" decoding="async" />
+            <img src="/NexliGadgetLogo.png" alt="Nexli Gadget Logo" className="h-8 sm:h-10 md:h-12 object-contain" loading="lazy" decoding="async" />
           </Link>
         </div>
 
@@ -88,32 +88,32 @@ export default function Header() {
         </div>
 
         {/* Icons */}
-        <div className="flex items-center gap-4 sm:gap-6">
+        <div className="flex items-center gap-3 sm:gap-6">
           <Link href={mounted ? accountLink : "/login"} className="flex flex-col items-center gap-1 text-gray-600 hover:text-accent transition-colors">
-            <User size={24} />
-            <span className="text-[10px] sm:text-xs font-medium">{mounted && isAuthenticated ? 'Dashboard' : 'Account'}</span>
+            <User size={22} className="sm:w-6 sm:h-6" />
+            <span className="hidden sm:block text-xs font-medium">{mounted && isAuthenticated ? 'Dashboard' : 'Account'}</span>
           </Link>
           <Link href="/wishlist" className="flex flex-col items-center gap-1 text-gray-600 hover:text-accent transition-colors relative">
             <div className="relative">
-              <Heart size={24} />
+              <Heart size={22} className="sm:w-6 sm:h-6" />
               {mounted && isAuthenticated && wishlist?.products?.length > 0 && (
-                <span className="absolute -top-1 -right-2 bg-accent text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
+                <span className="absolute -top-1.5 -right-2 bg-accent text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
                   {wishlist.products.length}
                 </span>
               )}
             </div>
-            <span className="text-[10px] sm:text-xs font-medium">Wishlist</span>
+            <span className="hidden sm:block text-xs font-medium">Wishlist</span>
           </Link>
           <Link href="/cart" className="flex flex-col items-center gap-1 text-gray-600 hover:text-accent transition-colors relative">
             <div className="relative">
-              <ShoppingCart size={24} />
+              <ShoppingCart size={22} className="sm:w-6 sm:h-6" />
               {mounted && isAuthenticated && cart?.items?.length > 0 && (
-                <span className="absolute -top-1 -right-2 bg-accent text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
+                <span className="absolute -top-1.5 -right-2 bg-accent text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">
                   {cart.items.length}
                 </span>
               )}
             </div>
-            <span className="text-[10px] sm:text-xs font-medium">Cart</span>
+            <span className="hidden sm:block text-xs font-medium">Cart</span>
           </Link>
         </div>
       </div>
