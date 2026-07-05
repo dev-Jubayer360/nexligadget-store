@@ -11,6 +11,7 @@ export default function Header() {
   const { cart, fetchCart } = useCartStore();
   const { wishlist, fetchWishlist } = useWishlistStore();
   const [mounted, setMounted] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -49,12 +50,22 @@ export default function Header() {
       </div>
 
       {/* Main Header */}
-      <div className="bg-white py-4 px-4 md:px-8 flex items-center justify-between border-b border-gray-100">
-        {/* Logo */}
-        <Link href="/" className="flex-shrink-0 flex items-center gap-2">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/NexliGadgetLogo.png" alt="Nexli Gadget Logo" className="h-10 sm:h-12 object-contain" />
-        </Link>
+      <div className="bg-white py-4 px-4 md:px-8 flex items-center justify-between border-b border-gray-100 relative z-50">
+        <div className="flex items-center gap-3">
+          {/* Mobile Menu Button */}
+          <button 
+            className="md:hidden text-gray-700 hover:text-accent p-1"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <Menu size={24} />
+          </button>
+          
+          {/* Logo */}
+          <Link href="/" className="flex-shrink-0 flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/NexliGadgetLogo.png" alt="Nexli Gadget Logo" className="h-10 sm:h-12 object-contain" loading="lazy" decoding="async" />
+          </Link>
+        </div>
 
         {/* Search Bar (Desktop) */}
         <div className="hidden md:flex flex-1 max-w-2xl mx-8">
@@ -136,6 +147,27 @@ export default function Header() {
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden absolute top-[135px] left-0 w-full bg-white border-b border-gray-100 shadow-lg px-4 py-2 flex flex-col z-50 text-sm font-bold text-primary animate-in slide-in-from-top-2">
+          <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-accent transition-colors py-3 border-b border-gray-50 flex items-center gap-2">
+            HOME
+          </Link>
+          <Link href="/shop" onClick={() => setIsMobileMenuOpen(false)} className="text-accent hover:text-accent-hover transition-colors py-3 border-b border-gray-50 flex items-center gap-2">
+            SHOP
+          </Link>
+          <Link href="/shop?badge=Bestseller" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-accent transition-colors py-3 border-b border-gray-50 flex items-center gap-2">
+            BEST SELLERS
+          </Link>
+          <Link href="/shop?badge=New" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-accent transition-colors py-3 border-b border-gray-50 flex items-center gap-2">
+            NEW ARRIVALS
+          </Link>
+          <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-accent transition-colors py-3 flex items-center gap-2">
+            CONTACT US
+          </Link>
+        </div>
+      )}
     </header>
   );
 }
