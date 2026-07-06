@@ -20,6 +20,11 @@ const useAuthStore = create(
           const response = await api.post('/auth/login', { email, password });
           const { data } = response.data;
           
+          if (data.requireOtp) {
+            set({ loading: false });
+            return { success: true, requireOtp: true, email: data.email };
+          }
+
           Cookies.set('token', data.token, { expires: 7 }); // 7 days
           localStorage.setItem('token', data.token);
 
@@ -33,6 +38,31 @@ const useAuthStore = create(
         } catch (error) {
           set({
             error: error.response?.data?.message || 'Login failed',
+            loading: false,
+          });
+          return false;
+        }
+      },
+
+      verifyOtp: async (email, otp) => {
+        set({ loading: true, error: null });
+        try {
+          const response = await api.post('/auth/verify-otp', { email, otp });
+          const { data } = response.data;
+          
+          Cookies.set('token', data.token, { expires: 7 });
+          localStorage.setItem('token', data.token);
+
+          set({
+            user: data,
+            token: data.token,
+            isAuthenticated: true,
+            loading: false,
+          });
+          return { success: true, user: data };
+        } catch (error) {
+          set({
+            error: error.response?.data?.message || 'OTP Verification failed',
             loading: false,
           });
           return false;

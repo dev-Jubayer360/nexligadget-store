@@ -19,8 +19,12 @@ export default function LoginPage() {
   const [phone, setPhone] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   
+  // OTP States
+  const [otpStep, setOtpStep] = useState(false);
+  const [otp, setOtp] = useState('');
+  
   const router = useRouter();
-  const { login, register, googleLogin, loading, error, clearError } = useAuthStore();
+  const { login, register, googleLogin, verifyOtp, loading, error, clearError } = useAuthStore();
   const [formError, setFormError] = useState('');
 
   const handleGoogleSuccess = async (credentialResponse) => {
@@ -48,6 +52,27 @@ export default function LoginPage() {
     if (!email || !password) return setFormError('Please fill all fields');
     
     const result = await login(email, password);
+    if (result && result.requireOtp) {
+      setOtpStep(true);
+      return;
+    }
+    
+    if (result && result.success && !result.requireOtp) {
+      if (result.user.role === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push('/dashboard');
+      }
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    clearError();
+    setFormError('');
+    if (!otp) return setFormError('Please enter the OTP');
+    
+    const result = await verifyOtp(email, otp);
     if (result && result.success) {
       if (result.user.role === 'admin') {
         router.push('/admin');
@@ -134,13 +159,13 @@ export default function LoginPage() {
             {/* Tabs */}
             <div className="flex border-b border-gray-200">
               <button 
-                onClick={() => setActiveTab('login')}
+                onClick={() => { setActiveTab('login'); setOtpStep(false); }}
                 className={`flex-1 py-4 text-center font-bold text-sm transition-colors ${activeTab === 'login' ? 'text-accent border-b-2 border-accent' : 'text-gray-500 hover:text-gray-800'}`}
               >
                 Login
               </button>
               <button 
-                onClick={() => { setActiveTab('register'); clearError(); setFormError(''); }}
+                onClick={() => { setActiveTab('register'); clearError(); setFormError(''); setOtpStep(false); }}
                 className={`flex-1 py-4 text-center font-bold text-sm transition-colors ${activeTab === 'register' ? 'text-accent border-b-2 border-accent' : 'text-gray-500 hover:text-gray-800'}`}
               >
                 Create Account
@@ -160,33 +185,60 @@ export default function LoginPage() {
                   <h3 className="text-xl font-bold text-gray-900 mb-1">Login to your account</h3>
                   <p className="text-sm text-gray-500 mb-6">Welcome back! Please enter your details.</p>
                   
-                  <form className="space-y-4" onSubmit={handleLogin}>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Email Address</label>
-                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Password</label>
-                      <div className="relative">
-                        <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
-                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {otpStep ? (
+                    <form className="space-y-4" onSubmit={handleVerifyOtp}>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Enter OTP</label>
+                        <p className="text-xs text-gray-500 mb-3">A 6-digit OTP has been sent to <strong>{email}</strong>. It is valid for 5 minutes.</p>
+                        <input 
+                          type="text" 
+                          maxLength={6}
+                          value={otp} 
+                          onChange={(e) => setOtp(e.target.value)} 
+                          placeholder="e.g. 123456" 
+                          className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm font-mono tracking-widest text-center text-lg" 
+                        />
+                      </div>
+                      
+                      <button type="submit" disabled={loading} className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3.5 rounded transition-colors mt-6 disabled:opacity-50">
+                        {loading ? 'Verifying...' : 'Verify OTP & Login'}
+                      </button>
+
+                      <div className="text-center mt-4">
+                        <button type="button" onClick={() => setOtpStep(false)} className="text-xs text-gray-500 hover:text-accent font-bold hover:underline">
+                          Back to Login
                         </button>
                       </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between mt-2">
-                      <label className="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" className="accent-accent rounded w-4 h-4" />
-                        <span className="text-xs text-gray-600">Remember me</span>
-                      </label>
-                      <Link href="#" className="text-xs text-accent font-bold hover:underline">Forgot password?</Link>
-                    </div>
+                    </form>
+                  ) : (
+                    <form className="space-y-4" onSubmit={handleLogin}>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Email Address</label>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Password</label>
+                        <div className="relative">
+                          <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
+                          <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between mt-2">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input type="checkbox" className="accent-accent rounded w-4 h-4" />
+                          <span className="text-xs text-gray-600">Remember me</span>
+                        </label>
+                        <Link href="#" className="text-xs text-accent font-bold hover:underline">Forgot password?</Link>
+                      </div>
 
-                    <button type="submit" disabled={loading} className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3.5 rounded transition-colors mt-6 disabled:opacity-50">
-                      {loading ? 'Logging in...' : 'Login'}
-                    </button>
-                  </form>
+                      <button type="submit" disabled={loading} className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3.5 rounded transition-colors mt-6 disabled:opacity-50">
+                        {loading ? 'Sending OTP...' : 'Login'}
+                      </button>
+                    </form>
+                  )}
 
                   <div className="mt-6">
                     <div className="relative flex items-center justify-center">
