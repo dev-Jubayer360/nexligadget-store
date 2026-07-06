@@ -73,24 +73,33 @@ const useAuthStore = create(
         set({ loading: true, error: null });
         try {
           const response = await api.post('/auth/register', userData);
-          const { data } = response.data;
+          const { message } = response.data;
           
-          Cookies.set('token', data.token, { expires: 7 });
-          localStorage.setItem('token', data.token);
-
-          set({
-            user: data,
-            token: data.token,
-            isAuthenticated: true,
-            loading: false,
-          });
-          return { success: true, user: data };
+          set({ loading: false });
+          return { success: true, message };
         } catch (error) {
           set({
             error: error.response?.data?.message || 'Registration failed',
             loading: false,
           });
           return false;
+        }
+      },
+
+      verifyEmailToken: async (token) => {
+        set({ loading: true, error: null });
+        try {
+          const response = await api.post('/auth/verify-email', { token });
+          const { message } = response.data;
+          
+          set({ loading: false });
+          return { success: true, message };
+        } catch (error) {
+          set({
+            error: error.response?.data?.message || 'Email Verification failed',
+            loading: false,
+          });
+          return { success: false, message: error.response?.data?.message || 'Email Verification failed' };
         }
       },
 

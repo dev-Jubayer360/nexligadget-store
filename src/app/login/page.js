@@ -22,6 +22,9 @@ export default function LoginPage() {
   // OTP States
   const [otpStep, setOtpStep] = useState(false);
   const [otp, setOtp] = useState('');
+
+  // Registration States
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
   
   const router = useRouter();
   const { login, register, googleLogin, verifyOtp, loading, error, clearError } = useAuthStore();
@@ -95,11 +98,7 @@ export default function LoginPage() {
 
     const result = await register({ name, email, phone, password });
     if (result && result.success) {
-      if (result.user.role === 'admin') {
-        router.push('/admin');
-      } else {
-        router.push('/dashboard');
-      }
+      setRegistrationSuccess(true);
     }
   };
 
@@ -165,7 +164,7 @@ export default function LoginPage() {
                 Login
               </button>
               <button 
-                onClick={() => { setActiveTab('register'); clearError(); setFormError(''); setOtpStep(false); }}
+                onClick={() => { setActiveTab('register'); clearError(); setFormError(''); setOtpStep(false); setRegistrationSuccess(false); }}
                 className={`flex-1 py-4 text-center font-bold text-sm transition-colors ${activeTab === 'register' ? 'text-accent border-b-2 border-accent' : 'text-gray-500 hover:text-gray-800'}`}
               >
                 Create Account
@@ -264,53 +263,70 @@ export default function LoginPage() {
                   <h3 className="text-xl font-bold text-gray-900 mb-1">Create your account</h3>
                   <p className="text-sm text-gray-500 mb-6">Join Nexli Gadget and enjoy exclusive benefits.</p>
                   
-                  <form className="space-y-4" onSubmit={handleRegister}>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Full Name</label>
-                      <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your full name" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Email Address</label>
-                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Phone Number</label>
-                      <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Enter your phone number" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Password</label>
-                      <div className="relative">
-                        <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Create a password" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
-                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                          {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                        </button>
+                  {registrationSuccess ? (
+                    <div className="text-center py-8">
+                      <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <ShieldCheck size={32} />
                       </div>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2">Check Your Email</h4>
+                      <p className="text-gray-600 text-sm mb-6">
+                        Registration successful! We have sent a verification link to <strong>{email}</strong>. Please check your inbox and click the link to verify your account.
+                      </p>
+                      <button onClick={() => { setActiveTab('login'); setRegistrationSuccess(false); }} className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3.5 rounded transition-colors">
+                        Go to Login
+                      </button>
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-1">Confirm Password</label>
-                      <div className="relative">
-                        <input type={showConfirmPassword ? 'text' : 'password'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm your password" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
-                        <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
-                          {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                        </button>
+                  ) : (
+                    <form className="space-y-4" onSubmit={handleRegister}>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Full Name</label>
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your full name" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
                       </div>
-                    </div>
-                    
-                    <div className="flex items-start mt-2">
-                      <input type="checkbox" id="terms" className="accent-accent rounded w-4 h-4 mt-1 mr-2" />
-                      <label htmlFor="terms" className="text-xs text-gray-600 leading-tight">
-                        I agree to the <Link href="#" className="text-accent hover:underline">Terms & Conditions</Link> and <Link href="#" className="text-accent hover:underline">Privacy Policy</Link>
-                      </label>
-                    </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Email Address</label>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Phone Number</label>
+                        <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Enter your phone number" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Password</label>
+                        <div className="relative">
+                          <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Create a password" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
+                          <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                          </button>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Confirm Password</label>
+                        <div className="relative">
+                          <input type={showConfirmPassword ? 'text' : 'password'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm your password" className="w-full border border-gray-200 rounded px-4 py-3 outline-none focus:border-accent text-sm" />
+                          <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                            {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start mt-2">
+                        <input type="checkbox" id="terms" className="accent-accent rounded w-4 h-4 mt-1 mr-2" />
+                        <label htmlFor="terms" className="text-xs text-gray-600 leading-tight">
+                          I agree to the <Link href="#" className="text-accent hover:underline">Terms & Conditions</Link> and <Link href="#" className="text-accent hover:underline">Privacy Policy</Link>
+                        </label>
+                      </div>
 
-                    <button type="submit" disabled={loading} className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3.5 rounded transition-colors mt-6 disabled:opacity-50">
-                      {loading ? 'Creating Account...' : 'Create Account'}
-                    </button>
-                  </form>
+                      <button type="submit" disabled={loading} className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3.5 rounded transition-colors mt-6 disabled:opacity-50">
+                        {loading ? 'Creating Account...' : 'Create Account'}
+                      </button>
+                    </form>
+                  )}
 
-                  <div className="mt-8 text-center text-sm text-gray-500">
-                    Already have an account? <button onClick={() => setActiveTab('login')} className="text-accent font-bold hover:underline">Login</button>
-                  </div>
+                  {!registrationSuccess && (
+                    <div className="mt-8 text-center text-sm text-gray-500">
+                      Already have an account? <button onClick={() => setActiveTab('login')} className="text-accent font-bold hover:underline">Login</button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
