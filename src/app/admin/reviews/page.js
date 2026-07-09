@@ -18,7 +18,7 @@ export default function AdminReviewsContactsPage() {
     try {
       const [reviewsRes, contactsRes] = await Promise.all([
         api.get('/admin/reviews'),
-        api.get('/admin/contact')
+        api.get('/admin/contact-messages')
       ]);
       setReviews(reviewsRes.data.data || []);
       setContacts(contactsRes.data.data || []);
